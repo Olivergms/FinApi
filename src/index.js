@@ -1,3 +1,4 @@
+const { json } = require('express');
 const express = require('express')
 const { v4: uuidv4 }  = require('uuid')
 
@@ -104,6 +105,16 @@ app.put("/account", verifyIfExistAccountCPF, (request, response) => {
     return response.status(200).send();
 })
 
+app.delete("/account", verifyIfExistAccountCPF, (request, response) => {
+    const { customer } = request;
+
+    //splice => primeiro parametro, onde inicia e até onde ele remove
+    customers.splice( (customer, 1) )
+
+    return response.status(200).json(customers);
+
+})
+
 app.post("/deposit", verifyIfExistAccountCPF, (request, response) => {
     const {description, amount } = request.body;
 
@@ -141,6 +152,15 @@ app.post('/withdraw', verifyIfExistAccountCPF, (request, response) => {
     customer.statement.push(statementOperation);
 
     return response.status(201).send();
+})
+
+app.get("/balance", verifyIfExistAccountCPF, (request, response) =>{
+    const { customer } = request;
+
+    const balance = getBalance(customer.statement);
+
+
+    return response.status(200).json(balance);
 })
 
 app.listen(3333, () => console.log("Servidor rodando na porta 3333"));
