@@ -65,6 +65,12 @@ app.get("/statement/date", verifyIfExistAccountCPF, (request, response) => {
     return response.json(statement);
 })
 
+app.get("/account", verifyIfExistAccountCPF, (request, response) => {
+    const { customer } = request;
+
+    return response.json(customer);
+})
+
 app.post("/account" , (request, response) => {
     const { cpf, name } = request.body;
 
@@ -86,6 +92,16 @@ app.post("/account" , (request, response) => {
     })
 
     response.status(201).send();
+})
+
+app.put("/account", verifyIfExistAccountCPF, (request, response) => {
+    const { name } = request.body;
+    const { customer } = request;
+
+    customer.name = name;
+
+
+    return response.status(200).send();
 })
 
 app.post("/deposit", verifyIfExistAccountCPF, (request, response) => {
